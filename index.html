@@ -394,8 +394,8 @@ const tot = 6;
 function startDiag() { document.getElementById('heroSection').style.display='none'; document.getElementById('formBox').classList.add('active'); document.getElementById('progressBar').classList.add('active'); updProg(); scrollTo({top:0,behavior:'smooth'}); }
 function go(n) { document.querySelector('[data-section="'+cur+'"]').style.display='none'; document.querySelector('[data-section="'+n+'"]').style.display='block'; cur=n; updProg(); scrollTo({top:0,behavior:'smooth'}); }
 function updProg() { const p=Math.round(cur/tot*100); document.getElementById('pFill').style.width=p+'%'; document.getElementById('pPct').textContent=p+'%'; document.getElementById('pLabel').textContent='Section '+cur+' of '+tot; }
-function sel(el,nm) { el.closest('.option-grid').querySelectorAll('.option-card').forEach(c=>c.classList.remove('selected')); el.classList.add('selected'); el.querySelector('input').checked=true; }
-function tog(el) { el.classList.toggle('selected'); const i=el.querySelector('input'); i.checked=!i.checked; }
+function sel(el,nm) { event.preventDefault(); el.closest('.option-grid').querySelectorAll('.option-card').forEach(c=>c.classList.remove('selected')); el.classList.add('selected'); el.querySelector('input').checked=true; }
+function tog(el) { event.preventDefault(); el.classList.toggle('selected'); const i=el.querySelector('input'); i.checked=!i.checked; }
 
 function gv(id){return document.getElementById(id)?.value||'';}
 function gr(nm){const r=document.querySelector('input[name="'+nm+'"]:checked'); return r?r.value:'';}
