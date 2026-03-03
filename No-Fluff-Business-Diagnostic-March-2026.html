@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>No Fluff Business Diagnostic — March Challenge 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0a0a0b;
+  --black-card: #111113;
+  --black-elevated: #19191d;
+  --border: #2a2a30;
+  --border-light: #3a3a42;
+  --orange: #ff6b35;
+  --neon-orange: #ff8c00;
+  --electric-blue: #3b82f6;
+  --neon-cyan: #06d6a0;
+  --hot-pink: #f72585;
+  --vivid-purple: #8b5cf6;
+  --acid-yellow: #facc15;
+  --lime: #84cc16;
+  --green: #22c55e;
+  --red: #ef4444;
+  --white: #ffffff;
+  --muted: #b0b0b8;
+  --dim: #666670;
+  --faint: #44444c;
+  --grad-fire: linear-gradient(135deg, #ff6b35, #ff8c00, #facc15);
+  --grad-heat: linear-gradient(135deg, #f72585, #ff6b35, #ff8c00);
+  --grad-electric: linear-gradient(135deg, #3b82f6, #8b5cf6, #f72585);
+  --grad-money: linear-gradient(135deg, #06d6a0, #22c55e, #84cc16);
+  --grad-sunset: linear-gradient(135deg, #ff6b35, #f72585, #8b5cf6);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--black); color: var(--white); font-family: 'Outfit', sans-serif; overflow-x: hidden; min-height: 100vh; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--orange); }
+
+.hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 24px; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 700px 500px at 25% 30%, rgba(255,107,53,0.10) 0%, transparent 70%), radial-gradient(ellipse 600px 600px at 75% 70%, rgba(139,92,246,0.06) 0%, transparent 70%); pointer-events: none; }
+.hero-badge { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 5px; text-transform: uppercase; background: var(--grad-fire); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 24px; animation: fadeUp .8s ease-out; }
+.hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 8vw, 100px); line-height: 0.92; letter-spacing: -1px; animation: fadeUp .8s ease-out .1s both; }
+.hero h1 .grad { background: var(--grad-fire); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero-sub { color: var(--muted); font-weight: 300; font-size: 17px; max-width: 560px; line-height: 1.7; margin-top: 20px; animation: fadeUp .8s ease-out .2s both; }
+.hero-meta { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--dim); margin-top: 32px; display: flex; gap: 24px; animation: fadeUp .8s ease-out .3s both; }
+.hero-meta span { display: flex; align-items: center; gap: 6px; }
+.hero-meta .dot { width: 6px; height: 6px; border-radius: 50%; }
+.start-btn { margin-top: 48px; padding: 18px 56px; background: var(--grad-fire); border: none; border-radius: 12px; color: var(--black); font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; cursor: pointer; transition: all 0.3s; animation: fadeUp .8s ease-out .4s both; }
+.start-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 40px rgba(255,107,53,0.4); }
+@keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+.progress-wrap { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(10,10,11,0.92); backdrop-filter: blur(12px); padding: 12px 24px; display: none; border-bottom: 1px solid var(--border); }
+.progress-wrap.active { display: block; }
+.progress-inner { max-width: 800px; margin: 0 auto; }
+.progress-top { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.progress-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+.progress-count { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--orange); }
+.progress-bar { width: 100%; height: 4px; border-radius: 2px; background: var(--border); overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 2px; background: var(--grad-fire); transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+.form-container { max-width: 820px; margin: 0 auto; padding: 100px 24px 60px; display: none; }
+.form-container.active { display: block; }
+
+.section-card { background: var(--black-card); border: 1px solid var(--border); border-radius: 20px; padding: 40px; margin-bottom: 32px; position: relative; overflow: hidden; animation: sectionIn 0.6s ease-out; }
+.section-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+@keyframes sectionIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+.section-card[data-color="orange"]::before { background: var(--grad-fire); }
+.section-card[data-color="blue"]::before { background: var(--grad-electric); }
+.section-card[data-color="green"]::before { background: var(--grad-money); }
+.section-card[data-color="pink"]::before { background: var(--grad-heat); }
+.section-card[data-color="purple"]::before { background: var(--grad-sunset); }
+.section-card[data-color="cyan"]::before { background: linear-gradient(135deg, #06d6a0, #3b82f6); }
+.section-number { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--dim); margin-bottom: 8px; }
+.section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(28px, 4vw, 40px); line-height: 1; margin-bottom: 8px; }
+.section-desc { color: var(--muted); font-weight: 300; font-size: 14px; line-height: 1.7; margin-bottom: 32px; max-width: 600px; }
+
+.field-group { margin-bottom: 28px; }
+.field-label { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 10px; display: block; line-height: 1.5; }
+input[type="text"], input[type="number"], textarea, select { width: 100%; background: var(--black-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; color: var(--white); font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 300; transition: all 0.3s; outline: none; }
+input:focus, textarea:focus, select:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(255,107,53,0.12); }
+textarea { min-height: 90px; resize: vertical; line-height: 1.6; }
+select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666670' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; }
+select option { background: var(--black-elevated); color: var(--white); }
+::placeholder { color: var(--faint); }
+
+.slider-labels { display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--dim); margin-bottom: 10px; }
+input[type="range"] { width: 100%; height: 6px; -webkit-appearance: none; appearance: none; background: var(--border); border-radius: 3px; outline: none; cursor: pointer; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 12px rgba(255,107,53,0.4); cursor: pointer; }
+input[type="range"]:focus { box-shadow: none; }
+.slider-value { text-align: center; margin-top: 8px; font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 600; }
+
+.option-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.option-card { background: var(--black-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; cursor: pointer; transition: all 0.25s; display: flex; align-items: flex-start; gap: 12px; }
+.option-card:hover { border-color: var(--border-light); }
+.option-card.selected { border-color: var(--orange); background: rgba(255,107,53,0.06); box-shadow: 0 0 0 1px var(--orange); }
+.option-card input { display: none; }
+.option-check { width: 20px; height: 20px; min-width: 20px; border: 2px solid var(--border-light); border-radius: 6px; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.25s; }
+.option-card.selected .option-check { background: var(--orange); border-color: var(--orange); }
+.option-card.selected .option-check::after { content: '\2713'; color: var(--black); font-size: 12px; font-weight: 700; }
+.option-text { font-size: 14px; font-weight: 400; line-height: 1.4; }
+.option-text small { display: block; color: var(--dim); font-size: 12px; font-weight: 300; margin-top: 2px; }
+
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 24px; border-top: 1px solid var(--border); }
+.nav-btn { padding: 12px 32px; border-radius: 10px; font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; }
+.nav-btn.back { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+.nav-btn.back:hover { border-color: var(--border-light); color: var(--white); }
+.nav-btn.next { background: var(--grad-fire); color: var(--black); }
+.nav-btn.next:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(255,107,53,0.3); }
+
+.results-container { max-width: 900px; margin: 0 auto; padding: 80px 24px 60px; display: none; }
+.results-container.active { display: block; }
+.results-hero { text-align: center; margin-bottom: 60px; animation: fadeUp .8s ease-out; }
+.score-ring-wrap { display: flex; justify-content: center; margin: 40px 0; animation: fadeUp .8s ease-out .2s both; }
+.score-ring { width: 200px; height: 200px; position: relative; }
+.score-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.score-ring .bg { fill: none; stroke: var(--border); stroke-width: 8; }
+.score-ring .fill { fill: none; stroke-width: 8; stroke-linecap: round; }
+.score-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.score-number { font-family: 'Bebas Neue', sans-serif; font-size: 56px; line-height: 1; }
+.score-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--dim); text-transform: uppercase; margin-top: 4px; }
+
+.cat-scores { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 48px; }
+.cat-card { background: var(--black-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; transition: all 0.3s; }
+.cat-card:hover { border-color: var(--border-light); transform: translateY(-2px); }
+.cat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.cat-name { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.cat-score { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; }
+.cat-bar { width: 100%; height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; margin-bottom: 12px; }
+.cat-bar-fill { height: 100%; border-radius: 3px; transition: width 1s cubic-bezier(0.4,0,0.2,1); }
+.cat-status { font-size: 12px; font-weight: 300; line-height: 1.5; }
+
+.gap-section { margin-bottom: 48px; }
+.gap-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; margin-bottom: 6px; }
+.gap-subtitle { color: var(--muted); font-size: 14px; font-weight: 300; margin-bottom: 24px; }
+.gap-card { background: var(--black-card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin-bottom: 16px; border-left: 3px solid; }
+.gap-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+.gap-card-title { font-size: 16px; font-weight: 600; }
+.gap-priority { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1px; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; }
+.gap-priority.critical { background: rgba(239,68,68,0.12); color: var(--red); }
+.gap-priority.high { background: rgba(255,107,53,0.12); color: var(--orange); }
+.gap-priority.medium { background: rgba(250,204,21,0.12); color: var(--acid-yellow); }
+.gap-priority.low { background: rgba(34,197,94,0.12); color: var(--green); }
+.gap-card-body { color: var(--muted); font-size: 14px; font-weight: 300; line-height: 1.7; }
+
+.wins-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 48px; }
+.win-card { background: var(--black-card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; position: relative; overflow: hidden; }
+.win-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--grad-money); }
+.win-number { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--green); letter-spacing: 2px; margin-bottom: 8px; }
+.win-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+.win-desc { color: var(--muted); font-size: 13px; font-weight: 300; line-height: 1.6; }
+
+.summary-box { background: var(--black-card); border: 1px solid var(--border); border-radius: 20px; padding: 40px; text-align: center; position: relative; overflow: hidden; }
+.summary-box::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(255,107,53,0.04) 0%, transparent 70%); pointer-events: none; }
+.summary-name { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 3px; color: var(--orange); text-transform: uppercase; margin-bottom: 16px; }
+.summary-headline { font-family: 'Bebas Neue', sans-serif; font-size: clamp(28px, 4vw, 44px); line-height: 1.05; margin-bottom: 16px; }
+.summary-headline .grad { background: var(--grad-fire); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.summary-text { color: var(--muted); font-size: 15px; font-weight: 300; line-height: 1.8; max-width: 600px; margin: 0 auto 28px; }
+.action-row { display: flex; gap: 12px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
+.action-btn { padding: 10px 24px; background: var(--black-elevated); border: 1px solid var(--border); border-radius: 10px; color: var(--muted); font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.3s; }
+.action-btn:hover { border-color: var(--orange); color: var(--white); }
+
+@media (max-width: 600px) {
+  .section-card { padding: 28px 20px; }
+  .option-grid { grid-template-columns: 1fr !important; }
+  .hero-meta { flex-direction: column; gap: 8px; }
+  .cat-scores { grid-template-columns: 1fr; }
+}
+@media print {
+  body { background: #fff; color: #111; }
+  .progress-wrap, .nav-row, .action-row, .start-btn, .hero { display: none !important; }
+  .results-container { display: block !important; padding-top: 20px; }
+  .section-card, .cat-card, .gap-card, .win-card, .summary-box { background: #f5f5f5; border-color: #ddd; break-inside: avoid; }
+  .score-number, .cat-score, .gap-card-title, .win-title, .summary-headline { color: #111; }
+  .hero-badge { color: #ff6b35; -webkit-text-fill-color: #ff6b35; }
+}
+</style>
+</head>
+<body>
+
+<div class="hero" id="heroSection">
+  <div class="hero-badge">March Challenge 2026 &mdash; Day 1</div>
+  <h1><span class="grad">BUSINESS</span><br>DIAGNOSTIC</h1>
+  <p class="hero-sub">Find the gaps. Fix the leaks. Build the machine.<br>A 5-minute assessment to figure out exactly where you are &mdash; and what to fix first.</p>
+  <div class="hero-meta">
+    <span><span class="dot" style="background:var(--orange);"></span> 6 Categories</span>
+    <span><span class="dot" style="background:var(--green);"></span> Scored Analysis</span>
+    <span><span class="dot" style="background:var(--vivid-purple);"></span> Custom Action Plan</span>
+  </div>
+  <button class="start-btn" onclick="startDiag()">BEGIN DIAGNOSTIC &rarr;</button>
+</div>
+
+<div class="progress-wrap" id="progressBar">
+  <div class="progress-inner">
+    <div class="progress-top">
+      <span class="progress-label" id="pLabel">Section 1 of 6</span>
+      <span class="progress-count" id="pPct">0%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="pFill" style="width:0%"></div></div>
+  </div>
+</div>
+
+<div class="form-container" id="formBox">
+
+  <!-- S1: IDENTITY -->
+  <div class="section-card" data-section="1" data-color="orange">
+    <div class="section-number">Section 01 &mdash; Identity</div>
+    <div class="section-title">YOU & YOUR BUSINESS</div>
+    <div class="section-desc">Let's get a baseline. Who are you, and what's the current state of your operation?</div>
+    <div class="field-group"><label class="field-label">Your name</label><input type="text" id="userName" placeholder="First name is fine"></div>
+    <div class="field-group"><label class="field-label">Your market (city/state)</label><input type="text" id="userMarket" placeholder="e.g. Atlanta, GA"></div>
+    <div class="field-group">
+      <label class="field-label">Where are you at right now?</label>
+      <div class="option-grid">
+        <label class="option-card" onclick="sel(this,'userStage')"><input type="radio" name="userStage" value="pre-first"><div class="option-check"></div><div class="option-text">Haven't done a deal yet<small>First Check Club</small></div></label>
+        <label class="option-card" onclick="sel(this,'userStage')"><input type="radio" name="userStage" value="1-3-deals"><div class="option-check"></div><div class="option-text">1&ndash;3 deals done<small>Getting traction</small></div></label>
+        <label class="option-card" onclick="sel(this,'userStage')"><input type="radio" name="userStage" value="4-10-deals"><div class="option-check"></div><div class="option-text">4&ndash;10 deals done<small>Builder mode</small></div></label>
+        <label class="option-card" onclick="sel(this,'userStage')"><input type="radio" name="userStage" value="10-plus"><div class="option-check"></div><div class="option-text">10+ deals done<small>Scaling up</small></div></label>
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Are you a licensed real estate agent?</label>
+      <div class="option-grid" style="grid-template-columns:1fr 1fr;">
+        <label class="option-card" onclick="sel(this,'isAgent')"><input type="radio" name="isAgent" value="yes"><div class="option-check"></div><div class="option-text">Yes, I'm licensed</div></label>
+        <label class="option-card" onclick="sel(this,'isAgent')"><input type="radio" name="isAgent" value="no"><div class="option-check"></div><div class="option-text">No, not licensed</div></label>
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">How many hours per week can you realistically commit?</label>
+      <div class="slider-labels"><span>1 hr</span><span>10 hrs</span><span>20 hrs</span><span>40+ hrs</span></div>
+      <input type="range" id="hoursPerWeek" min="1" max="40" value="10" oninput="document.getElementById('hpwD').textContent=this.value+' hours/week'">
+      <div class="slider-value" id="hpwD" style="color:var(--orange);">10 hours/week</div>
+    </div>
+    <div class="nav-row"><div></div><button class="nav-btn next" onclick="go(2)">NEXT &rarr;</button></div>
+  </div>
+
+  <!-- S2: DEAL FLOW -->
+  <div class="section-card" data-section="2" data-color="green" style="display:none;">
+    <div class="section-number">Section 02 &mdash; Deal Flow</div>
+    <div class="section-title">YOUR PIPELINE</div>
+    <div class="section-desc">How deals are coming in (or not). This is the lifeblood of the operation.</div>
+    <div class="field-group">
+      <label class="field-label">How are you currently finding deals? (select all)</label>
+      <div class="option-grid">
+        <label class="option-card" onclick="tog(this)"><input type="checkbox" name="dealSource" value="agents"><div class="option-check"></div><div class="option-text">Working with agents<small>The Gatekeeper model</small></div></label>
+        <label class="option-card" onclick="tog(this)"><input type="checkbox" name="dealSource" value="cold-calling"><div class="option-check"></div><div class="option-text">Cold calling / texting<small>Direct to seller</small></div></label>
+        <label class="option-card" onclick="tog(this)"><input type="checkbox" name="dealSource" value="mailers"><div class="option-check"></div><div class="option-text">Direct mail<small>Postcards / letters</small></div></label>
+        <label class="option-card" onclick="tog(this)"><input type="checkbox" name="dealSource" value="driving"><div class="option-check"></div><div class="option-text">Driving for dollars<small>Boots on the ground</small></div></label>
+        <label class="option-card" onclick="tog(this)"><input type="checkbox" name="dealSource" value="ppc"><div class="option-check"></div><div class="option-text">PPC / paid ads<small>Google, Facebook</small></div></label>
+        <label class="option-card" onclick="tog(this)"><input type="checkbox" name="dealSource" value="none"><div class="option-check"></div><div class="option-text">Nothing yet<small>Haven't started</small></div></label>
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Roughly how much are you spending per month on deal acquisition?</label>
+      <select id="dealSpend"><option value="" disabled selected>Select range...</option><option value="0">$0 &mdash; not spending anything yet</option><option value="250">Under $500/mo</option><option value="750">$500 &ndash; $1,000/mo</option><option value="2000">$1,000 &ndash; $3,000/mo</option><option value="5000">$3,000 &ndash; $10,000/mo</option><option value="10000">$10,000+/mo</option></select>
+    </div>
+    <div class="field-group">
+      <label class="field-label">How many leads are you generating per month?</label>
+      <select id="leadsPerMonth"><option value="" disabled selected>Select range...</option><option value="0">None right now</option><option value="5">1&ndash;10 leads</option><option value="25">11&ndash;50 leads</option><option value="75">51&ndash;100 leads</option><option value="150">100+ leads</option></select>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Do you have a buyer list (Checkbooks)?</label>
+      <div class="option-grid" style="grid-template-columns:repeat(3,1fr);">
+        <label class="option-card" onclick="sel(this,'hasBuyers')"><input type="radio" name="hasBuyers" value="no"><div class="option-check"></div><div class="option-text">No buyers yet</div></label>
+        <label class="option-card" onclick="sel(this,'hasBuyers')"><input type="radio" name="hasBuyers" value="small"><div class="option-check"></div><div class="option-text">A few contacts</div></label>
+        <label class="option-card" onclick="sel(this,'hasBuyers')"><input type="radio" name="hasBuyers" value="solid"><div class="option-check"></div><div class="option-text">Solid buyer list</div></label>
+      </div>
+    </div>
+    <div class="nav-row"><button class="nav-btn back" onclick="go(1)">&larr; BACK</button><button class="nav-btn next" onclick="go(3)">NEXT &rarr;</button></div>
+  </div>
+
+  <!-- S3: SYSTEMS -->
+  <div class="section-card" data-section="3" data-color="purple" style="display:none;">
+    <div class="section-number">Section 03 &mdash; Systems</div>
+    <div class="section-title">YOUR TECH STACK</div>
+    <div class="section-desc">Systems separate a side hustle from a business. Let's see what you're working with.</div>
+    <div class="field-group">
+      <label class="field-label">Do you have a CRM to manage leads and follow-up?</label>
+      <div class="option-grid" style="grid-template-columns:repeat(3,1fr);">
+        <label class="option-card" onclick="sel(this,'hasCRM')"><input type="radio" name="hasCRM" value="none"><div class="option-check"></div><div class="option-text">No CRM<small>Spreadsheets / nothing</small></div></label>
+        <label class="option-card" onclick="sel(this,'hasCRM')"><input type="radio" name="hasCRM" value="basic"><div class="option-check"></div><div class="option-text">Basic setup<small>Have one, barely use it</small></div></label>
+        <label class="option-card" onclick="sel(this,'hasCRM')"><input type="radio" name="hasCRM" value="dialed"><div class="option-check"></div><div class="option-text">Dialed in<small>Active pipeline management</small></div></label>
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Rate your follow-up game (1 = non-existent, 10 = machine-like)</label>
+      <div class="slider-labels"><span>Non-existent</span><span>Inconsistent</span><span>Solid</span><span>Machine-like</span></div>
+      <input type="range" id="followUp" min="1" max="10" value="3" oninput="document.getElementById('fuD').textContent=this.value+' / 10'">
+      <div class="slider-value" id="fuD" style="color:var(--vivid-purple);">3 / 10</div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Do you have automated outreach sequences?</label>
+      <div class="option-grid" style="grid-template-columns:repeat(3,1fr);">
+        <label class="option-card" onclick="sel(this,'hasAutomation')"><input type="radio" name="hasAutomation" value="none"><div class="option-check"></div><div class="option-text">Nothing automated<small>All manual</small></div></label>
+        <label class="option-card" onclick="sel(this,'hasAutomation')"><input type="radio" name="hasAutomation" value="some"><div class="option-check"></div><div class="option-text">Some automations<small>Partially built out</small></div></label>
+        <label class="option-card" onclick="sel(this,'hasAutomation')"><input type="radio" name="hasAutomation" value="full"><div class="option-check"></div><div class="option-text">Fully automated<small>Sequences running daily</small></div></label>
+      </div>
+    </div>
+    <div class="field-group"><label class="field-label">How do you currently track your deals and pipeline?</label><textarea id="trackingMethod" placeholder="Describe how you're tracking things &mdash; spreadsheets, CRM, sticky notes, nothing at all..."></textarea></div>
+    <div class="nav-row"><button class="nav-btn back" onclick="go(2)">&larr; BACK</button><button class="nav-btn next" onclick="go(4)">NEXT &rarr;</button></div>
+  </div>
+
+  <!-- S4: AI -->
+  <div class="section-card" data-section="4" data-color="blue" style="display:none;">
+    <div class="section-number">Section 04 &mdash; AI & Automation</div>
+    <div class="section-title">YOUR AI GAME</div>
+    <div class="section-desc">AI is the leverage multiplier. Where are you on the adoption curve?</div>
+    <div class="field-group">
+      <label class="field-label">How would you describe your current AI usage?</label>
+      <div class="option-grid" style="grid-template-columns:1fr 1fr;">
+        <label class="option-card" onclick="sel(this,'aiLevel')"><input type="radio" name="aiLevel" value="none"><div class="option-check"></div><div class="option-text">Not using AI at all<small>Don't know where to start</small></div></label>
+        <label class="option-card" onclick="sel(this,'aiLevel')"><input type="radio" name="aiLevel" value="basic"><div class="option-check"></div><div class="option-text">ChatGPT for basics<small>Writing, research, ideas</small></div></label>
+        <label class="option-card" onclick="sel(this,'aiLevel')"><input type="radio" name="aiLevel" value="intermediate"><div class="option-check"></div><div class="option-text">AI in my workflows<small>Bots, automations, integrations</small></div></label>
+        <label class="option-card" onclick="sel(this,'aiLevel')"><input type="radio" name="aiLevel" value="advanced"><div class="option-check"></div><div class="option-text">AI running parts of my biz<small>Voice agents, auto-follow-up</small></div></label>
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Which of these are you using AI for? (select all)</label>
+      <div class="option-grid">
+        <label class="option-card" onclick="tog(this)"><input type="checkbox" name="aiUse" value="outreach"><div class="option-check"></div><div class="option-text">Lead outreach / texting</div></label>
+        <label class="option-card" onclick="tog(this)"><input type="checkbox" name="aiUse" value="comps"><div class="option-check"></div><div class="option-text">Comp analysis / underwriting</div></label>
+        <label class="option-card" onclick="tog(this)"><input type="checkbox" name="aiUse" value="voice"><div class="option-check"></div><div class="option-text">Voice agents / phone calls</div></label>
+        <label class="option-card" onclick="tog(this)"><input type="checkbox" name="aiUse" value="content"><div class="option-check"></div><div class="option-text">Content creation</div></label>
+        <label class="option-card" onclick="tog(this)"><input type="checkbox" name="aiUse" value="data"><div class="option-check"></div><div class="option-text">Data analysis / lists</div></label>
+        <label class="option-card" onclick="tog(this)"><input type="checkbox" name="aiUse" value="none"><div class="option-check"></div><div class="option-text">None of the above</div></label>
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">How comfortable are you learning new tech tools?</label>
+      <div class="slider-labels"><span>Terrified</span><span>Nervous</span><span>Comfortable</span><span>Bring it on</span></div>
+      <input type="range" id="techComfort" min="1" max="10" value="5" oninput="document.getElementById('tcD').textContent=this.value+' / 10'">
+      <div class="slider-value" id="tcD" style="color:var(--electric-blue);">5 / 10</div>
+    </div>
+    <div class="nav-row"><button class="nav-btn back" onclick="go(3)">&larr; BACK</button><button class="nav-btn next" onclick="go(5)">NEXT &rarr;</button></div>
+  </div>
+
+  <!-- S5: MONEY -->
+  <div class="section-card" data-section="5" data-color="pink" style="display:none;">
+    <div class="section-number">Section 05 &mdash; Money</div>
+    <div class="section-title">REVENUE & OVERHEAD</div>
+    <div class="section-desc">Let's get real about the numbers. No judgment &mdash; just facts.</div>
+    <div class="field-group"><label class="field-label">What's your real estate revenue looking like right now?</label>
+      <select id="currentRevenue"><option value="" disabled selected>Select range...</option><option value="0">$0 &mdash; haven't made money yet</option><option value="2500">Under $5K total</option><option value="7500">$5K &ndash; $10K total</option><option value="15000">$10K &ndash; $25K total</option><option value="37500">$25K &ndash; $50K total</option><option value="75000">$50K &ndash; $100K total</option><option value="100000">$100K+ total</option></select>
+    </div>
+    <div class="field-group"><label class="field-label">What's your monthly overhead for the RE business?</label>
+      <select id="monthlyOverhead"><option value="" disabled selected>Select range...</option><option value="0">$0 &mdash; no overhead yet</option><option value="250">Under $500/mo</option><option value="750">$500 &ndash; $1,000/mo</option><option value="2000">$1,000 &ndash; $3,000/mo</option><option value="5000">$3,000 &ndash; $5,000/mo</option><option value="7500">$5,000+/mo</option></select>
+    </div>
+    <div class="field-group"><label class="field-label">What's your average cost per deal right now?</label>
+      <select id="costPerDeal"><option value="" disabled selected>Select range...</option><option value="0">No idea / haven't done a deal</option><option value="150">Under $200</option><option value="500">$200 &ndash; $500</option><option value="1500">$500 &ndash; $2,000</option><option value="3000">$2,000 &ndash; $5,000</option><option value="5000">$5,000+</option></select>
+    </div>
+    <div class="field-group"><label class="field-label">What's your 12-month income goal from real estate?</label>
+      <select id="incomeGoal"><option value="" disabled selected>Select range...</option><option value="25000">$10K &ndash; $25K (first wins)</option><option value="50000">$25K &ndash; $50K (replace a job)</option><option value="100000">$50K &ndash; $100K (serious income)</option><option value="250000">$100K &ndash; $250K (scale up)</option><option value="500000">$250K+ (build an empire)</option></select>
+    </div>
+    <div class="nav-row"><button class="nav-btn back" onclick="go(4)">&larr; BACK</button><button class="nav-btn next" onclick="go(6)">NEXT &rarr;</button></div>
+  </div>
+
+  <!-- S6: MINDSET -->
+  <div class="section-card" data-section="6" data-color="cyan" style="display:none;">
+    <div class="section-number">Section 06 &mdash; The Real Talk</div>
+    <div class="section-title">BLOCKERS & MINDSET</div>
+    <div class="section-desc">This is the stuff most diagnostics skip. But it's usually what's actually holding you back.</div>
+    <div class="field-group">
+      <label class="field-label">What's the #1 thing holding you back right now?</label>
+      <div class="option-grid" style="grid-template-columns:1fr 1fr;">
+        <label class="option-card" onclick="sel(this,'blocker')"><input type="radio" name="blocker" value="knowledge"><div class="option-check"></div><div class="option-text">Don't know what to do<small>Need a clear roadmap</small></div></label>
+        <label class="option-card" onclick="sel(this,'blocker')"><input type="radio" name="blocker" value="time"><div class="option-check"></div><div class="option-text">Not enough time<small>Day job / family / life</small></div></label>
+        <label class="option-card" onclick="sel(this,'blocker')"><input type="radio" name="blocker" value="money"><div class="option-check"></div><div class="option-text">Limited capital<small>Can't invest in tools</small></div></label>
+        <label class="option-card" onclick="sel(this,'blocker')"><input type="radio" name="blocker" value="confidence"><div class="option-check"></div><div class="option-text">Confidence / fear<small>Scared to take the leap</small></div></label>
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Rate your confidence in closing a deal in the next 30 days</label>
+      <div class="slider-labels"><span>Not at all</span><span>Maybe</span><span>Probable</span><span>Guaranteed</span></div>
+      <input type="range" id="confidence" min="1" max="10" value="4" oninput="document.getElementById('confD').textContent=this.value+' / 10'">
+      <div class="slider-value" id="confD" style="color:var(--neon-cyan);">4 / 10</div>
+    </div>
+    <div class="field-group"><label class="field-label">What does "winning" look like at the end of this March Challenge?</label><textarea id="winDefinition" placeholder="Be specific &mdash; what outcome would make this month a massive win for you?"></textarea></div>
+    <div class="field-group"><label class="field-label">Anything else you want us to know?</label><textarea id="extraNotes" placeholder="Context, challenges, goals, background &mdash; anything that helps us help you..."></textarea></div>
+    <div class="nav-row">
+      <button class="nav-btn back" onclick="go(5)">&larr; BACK</button>
+      <button class="nav-btn next" onclick="genResults()" style="background:var(--grad-money);">GENERATE MY DIAGNOSTIC &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<div class="results-container" id="resultsBox"><div id="resultsContent"></div></div>
+
+<script>
+let cur = 1;
+const tot = 6;
+function startDiag() { document.getElementById('heroSection').style.display='none'; document.getElementById('formBox').classList.add('active'); document.getElementById('progressBar').classList.add('active'); updProg(); scrollTo({top:0,behavior:'smooth'}); }
+function go(n) { document.querySelector('[data-section="'+cur+'"]').style.display='none'; document.querySelector('[data-section="'+n+'"]').style.display='block'; cur=n; updProg(); scrollTo({top:0,behavior:'smooth'}); }
+function updProg() { const p=Math.round(cur/tot*100); document.getElementById('pFill').style.width=p+'%'; document.getElementById('pPct').textContent=p+'%'; document.getElementById('pLabel').textContent='Section '+cur+' of '+tot; }
+function sel(el,nm) { el.closest('.option-grid').querySelectorAll('.option-card').forEach(c=>c.classList.remove('selected')); el.classList.add('selected'); el.querySelector('input').checked=true; }
+function tog(el) { el.classList.toggle('selected'); const i=el.querySelector('input'); i.checked=!i.checked; }
+
+function gv(id){return document.getElementById(id)?.value||'';}
+function gr(nm){const r=document.querySelector('input[name="'+nm+'"]:checked'); return r?r.value:'';}
+function gc(nm){return[...document.querySelectorAll('input[name="'+nm+'"]:checked')].map(i=>i.value);}
+
+function calcScores(){
+  const s={};
+  // Deal Flow
+  let df=20; const src=gc('dealSource');
+  if(src.includes('agents'))df+=25; if(src.includes('cold-calling'))df+=10; if(src.includes('ppc'))df+=10; if(src.includes('mailers'))df+=5; if(src.includes('driving'))df+=5; if(src.includes('none'))df=5;
+  const ld=parseInt(gv('leadsPerMonth'))||0; if(ld>=75)df+=20;else if(ld>=25)df+=15;else if(ld>=5)df+=8;
+  const by=gr('hasBuyers'); if(by==='solid')df+=15;else if(by==='small')df+=8;
+  s.dealFlow=Math.min(df,100);
+
+  // Systems
+  let sy=10; const crm=gr('hasCRM'); if(crm==='dialed')sy+=35;else if(crm==='basic')sy+=15;
+  sy+=parseInt(gv('followUp')||3)*3;
+  const au=gr('hasAutomation'); if(au==='full')sy+=30;else if(au==='some')sy+=15;
+  s.systems=Math.min(sy,100);
+
+  // AI
+  let ai=5; const al=gr('aiLevel'); if(al==='advanced')ai+=40;else if(al==='intermediate')ai+=25;else if(al==='basic')ai+=10;
+  ai+=gc('aiUse').filter(u=>u!=='none').length*8; ai+=parseInt(gv('techComfort')||5)*2;
+  s.ai=Math.min(ai,100);
+
+  // Financial
+  let fi=15; const rv=parseInt(gv('currentRevenue'))||0; if(rv>=75000)fi+=30;else if(rv>=25000)fi+=20;else if(rv>=7500)fi+=10;
+  const oh=parseInt(gv('monthlyOverhead'))||0; if(oh<=500)fi+=20;else if(oh<=2000)fi+=10;
+  const cpd=parseInt(gv('costPerDeal'))||3000; if(cpd<=200)fi+=25;else if(cpd<=500)fi+=15;else if(cpd<=1500)fi+=8;
+  s.financial=Math.min(fi,100);
+
+  // Readiness
+  let re=20; const hr=parseInt(gv('hoursPerWeek'))||10; if(hr>=20)re+=25;else if(hr>=10)re+=15;else if(hr>=5)re+=8;
+  re+=parseInt(gv('confidence')||4)*4;
+  const st=gr('userStage'); if(st==='10-plus')re+=20;else if(st==='4-10-deals')re+=15;else if(st==='1-3-deals')re+=10;
+  s.readiness=Math.min(re,100);
+
+  // Agent Model Fit
+  let am=30; if(src.includes('agents'))am+=30; if(gr('isAgent')==='yes')am+=15; if(cpd>1000||cpd===0)am+=10; if(oh>2000)am+=10;
+  s.agentModel=Math.min(am,100);
+
+  s.overall=Math.round(s.dealFlow*.25+s.systems*.20+s.ai*.15+s.financial*.15+s.readiness*.15+s.agentModel*.10);
+  return s;
+}
+
+function sColor(sc){if(sc>=75)return'var(--green)';if(sc>=50)return'var(--acid-yellow)';if(sc>=30)return'var(--orange)';return'var(--red)';}
+function sStat(sc){if(sc>=75)return'Strong — Keep building on this';if(sc>=50)return'Decent — Room for optimization';if(sc>=30)return'Needs work — Priority this challenge';return'Critical gap — This is where we start';}
+function sGrade(sc){if(sc>=90)return'A+';if(sc>=80)return'A';if(sc>=70)return'B+';if(sc>=60)return'B';if(sc>=50)return'C+';if(sc>=40)return'C';if(sc>=30)return'D';return'F';}
+
+function genResults(){
+  const sc=calcScores(), nm=gv('userName')||'Underdog', mk=gv('userMarket')||'Your Market', st=gr('userStage'), bk=gr('blocker'), wd=gv('winDefinition'), ig=parseInt(gv('incomeGoal'))||50000;
+  const oc=sColor(sc.overall), circ=2*Math.PI*85, dash=circ-(circ*sc.overall/100);
+  const cats=[{k:'dealFlow',n:'Deal Flow',c:'var(--green)'},{k:'systems',n:'Systems & CRM',c:'var(--vivid-purple)'},{k:'ai',n:'AI Adoption',c:'var(--electric-blue)'},{k:'financial',n:'Financial Health',c:'var(--acid-yellow)'},{k:'readiness',n:'Readiness',c:'var(--neon-cyan)'},{k:'agentModel',n:'Agent Model Fit',c:'var(--orange)'}];
+
+  const gaps=[];
+  if(sc.dealFlow<60) gaps.push({t:'Your Deal Pipeline Needs Fuel',p:sc.dealFlow<30?'critical':'high',c:'var(--green)',b:'Your deal flow score is '+sc.dealFlow+'/100. '+(gc('dealSource').includes('none')?"You haven't started sourcing deals yet — that's okay, that's exactly what this challenge is for.":"You're generating some leads, but the pipeline needs more volume and better sources.")+' The Gatekeeper model (working with active listing agents) is the fastest path to deals at $150-200 per deal instead of the $3K industry average. This month, focus on pulling agent lists, running the Call/Comp/Close process, and getting reps in.'});
+  if(sc.systems<60) gaps.push({t:'Systems Are Leaking Deals',p:sc.systems<30?'critical':'high',c:'var(--vivid-purple)',b:'Your systems score is '+sc.systems+'/100. '+(gr('hasCRM')==='none'?"Without a CRM, you're flying blind. Leads are falling through the cracks.":"You have some infrastructure, but follow-up and automation need tightening.")+' Priority one: get your CRM dialed — pipeline stages set up, follow-up sequences active, every lead tracked. The fortune is in the follow-up.'});
+  if(sc.ai<50) gaps.push({t:'AI Is Your Untapped Superpower',p:sc.ai<25?'high':'medium',c:'var(--electric-blue)',b:'Your AI adoption score is '+sc.ai+'/100. '+(gr('aiLevel')==='none'?"You're not using AI at all yet — biggest upside potential in this challenge.":"You're dabbling, but barely scratching the surface.")+' AI is what lets a 1-2 hour/day operation compete with companies spending $80K/month. This month: AI-powered outreach, automated follow-up, and tools that do the heavy lifting.'});
+  if(sc.financial<50) gaps.push({t:'The Economics Need a Rewrite',p:'medium',c:'var(--acid-yellow)',b:'Your financial health score is '+sc.financial+'/100. '+(parseInt(gv('costPerDeal'))>1500?"Your cost per deal is way too high — you could be paying 10-20x less.":"You're early in the game or overhead is eating your margins.")+' The goal: $150-200 cost per deal, minimal overhead, maximum profit per transaction.'});
+  if(sc.readiness<50) gaps.push({t:'Mindset & Commitment Check',p:'medium',c:'var(--neon-cyan)',b:'Your readiness score is '+sc.readiness+'/100. '+(bk==='confidence'?"Fear is the real blocker — completely normal. Everyone started here.":bk==='time'?"Time is tight, but this model is designed for 1-2 hours per day.":"Awareness is step one, and you're here.")+' This challenge is about momentum. One deal changes everything. Trust the system.'});
+  if(gaps.length===0) gaps.push({t:"You're in a Strong Position",p:'low',c:'var(--green)',b:'Your scores are solid across the board. This challenge is about optimization and acceleration — dialing in the AI layer and increasing deal velocity.'});
+
+  const qw=[];
+  if(!gc('dealSource').includes('agents'))qw.push({t:'Pull Your First Agent List',d:'Use Batch Leads to pull active listing agents in your market. Start with agents who have 3+ listings — these are your Tier 1 Gatekeepers.'});
+  if(gr('hasCRM')==='none')qw.push({t:'Get Your CRM Set Up Today',d:'Even a basic pipeline beats no pipeline. Set up stages: New Lead → Contacted → Interested → Under Contract → Closed.'});
+  if(gr('aiLevel')==='none'||gr('aiLevel')==='basic')qw.push({t:'Set Up Your First AI Workflow',d:'Start simple — an AI-powered text sequence to agents. One automation running 24/7 outperforms hours of manual outreach.'});
+  if(gr('hasBuyers')==='no')qw.push({t:'Build Your Checkbook List',d:'Pull cash buyer data from Investor Base for your market. You need buyers ready before deals come — not after.'});
+  qw.push({t:'Run Your First 3 Cs Cycle',d:'Call an agent, comp the property, work toward the close. Get one full cycle done this week.'});
+  if(qw.length>4)qw.length=4;
+
+  const stLabel=st==='pre-first'?'First Check Club':st==='1-3-deals'?'1-3 Deals':st==='4-10-deals'?'Builder (4-10)':'Scaling (10+)';
+
+  let h='<div class="results-hero"><div class="hero-badge">Diagnostic Complete &mdash; March 3, 2026</div><h2><span class="grad">'+nm.toUpperCase()+"'S</span><br>GAP ANALYSIS</h2></div>";
+  h+='<div class="score-ring-wrap"><div class="score-ring"><svg viewBox="0 0 200 200"><circle class="bg" cx="100" cy="100" r="85"/><circle class="fill" cx="100" cy="100" r="85" stroke="'+oc+'" stroke-dasharray="'+circ+'" stroke-dashoffset="'+dash+'" style="filter:drop-shadow(0 0 8px '+oc+')"/></svg><div class="score-center"><div class="score-number" style="color:'+oc+'">'+sc.overall+'</div><div class="score-label">Overall Score</div></div></div></div>';
+  h+='<div style="text-align:center;margin-bottom:48px"><div style="font-family:\'JetBrains Mono\',monospace;font-size:13px;color:var(--dim)">'+mk+' · '+stLabel+' · Grade: <span style="color:'+oc+';font-weight:700">'+sGrade(sc.overall)+'</span></div></div>';
+
+  h+='<div class="cat-scores">';
+  cats.forEach((c,i)=>{h+='<div class="cat-card"><div class="cat-header"><div class="cat-name" style="color:'+c.c+'">'+c.n+'</div><div class="cat-score" style="color:'+sColor(sc[c.k])+'">'+sc[c.k]+'/100</div></div><div class="cat-bar"><div class="cat-bar-fill" style="width:'+sc[c.k]+'%;background:'+c.c+'"></div></div><div class="cat-status">'+sStat(sc[c.k])+'</div></div>';});
+  h+='</div>';
+
+  h+='<div class="gap-section"><div class="hero-badge" style="margin-bottom:8px">Where to Focus</div><div class="gap-title">YOUR GAP ANALYSIS</div><div class="gap-subtitle">Prioritized by impact — fix these in order for maximum results this month.</div>';
+  gaps.forEach(g=>{h+='<div class="gap-card" style="border-left-color:'+g.c+'"><div class="gap-card-header"><div class="gap-card-title">'+g.t+'</div><div class="gap-priority '+g.p+'">'+g.p+'</div></div><div class="gap-card-body">'+g.b+'</div></div>';});
+  h+='</div>';
+
+  h+='<div class="gap-section"><div class="hero-badge" style="margin-bottom:8px">This Week</div><div class="gap-title">QUICK WINS &mdash; DO THESE FIRST</div><div class="gap-subtitle">Immediate actions you can take today to start building momentum.</div><div class="wins-grid">';
+  qw.forEach((w,i)=>{h+='<div class="win-card"><div class="win-number">QUICK WIN #'+(i+1)+'</div><div class="win-title">'+w.t+'</div><div class="win-desc">'+w.d+'</div></div>';});
+  h+='</div></div>';
+
+  if(wd){h+='<div class="gap-section"><div class="hero-badge" style="margin-bottom:8px">Your North Star</div><div class="gap-title">WHAT WINNING LOOKS LIKE</div><div style="background:var(--black-card);border:1px solid var(--border);border-radius:16px;padding:28px;border-left:3px solid var(--orange)"><div style="color:var(--muted);font-size:15px;font-weight:300;line-height:1.8;font-style:italic">&ldquo;'+wd+'&rdquo;</div><div style="margin-top:12px;font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--orange)">&mdash; '+nm+', March Challenge 2026</div></div></div>';}
+
+  const headline=sc.overall>=70?"YOU'RE READY TO <span class='grad'>ACCELERATE</span>":sc.overall>=40?"THE <span class='grad'>FOUNDATION</span> IS BEING BUILT":"THIS IS YOUR <span class='grad'>STARTING LINE</span>";
+  const msg=sc.overall>=70?'You\'ve got a solid base, '+nm+'. This challenge is about turning that foundation into a deal-closing machine. Focus on the AI layer and pipeline velocity — that\'s where your biggest unlock is.':sc.overall>=40?'You\'ve got pieces in place, '+nm+'. The mission this month is connecting those pieces into a system that runs. The gaps above are your roadmap — work them in order.':'Every single person who\'s crushed it in this community started exactly where you are right now, '+nm+'. This isn\'t about where you\'re starting — it\'s about the system you\'re building. Follow the challenge, trust the process, and watch what happens in 30 days.';
+
+  h+='<div class="summary-box"><div class="summary-name">'+nm+"'s March Challenge Game Plan</div><div class=\"summary-headline\">"+headline+'</div><div class="summary-text">'+msg+'</div><div style="font-family:\'JetBrains Mono\',monospace;font-size:12px;color:var(--dim);margin-top:12px">NO FLUFF REAL ESTATE · MARCH CHALLENGE 2026 · DAY 1</div></div>';
+  h+='<div class="action-row"><button class="action-btn" onclick="window.print()">Print Results</button><button class="action-btn" onclick="restart()">Start Over</button></div>';
+
+  document.getElementById('resultsContent').innerHTML=h;
+  document.getElementById('formBox').classList.remove('active');
+  document.getElementById('progressBar').classList.remove('active');
+  document.getElementById('resultsBox').classList.add('active');
+  scrollTo({top:0,behavior:'smooth'});
+}
+
+function restart(){
+  document.getElementById('resultsBox').classList.remove('active');
+  document.getElementById('heroSection').style.display='flex';
+  document.querySelectorAll('input[type="text"],textarea').forEach(i=>i.value='');
+  document.querySelectorAll('select').forEach(s=>s.selectedIndex=0);
+  document.querySelectorAll('.option-card.selected').forEach(c=>c.classList.remove('selected'));
+  document.querySelectorAll('input[type="radio"],input[type="checkbox"]').forEach(i=>i.checked=false);
+  cur=1;
+  document.querySelectorAll('.section-card').forEach((s,i)=>s.style.display=i===0?'block':'none');
+  scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
