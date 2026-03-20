@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>No Fluff Business Diagnostic — March Challenge 2026</title>
+<title>No Fluff Business Diagnostic</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -162,6 +162,18 @@ input[type="range"]:focus { box-shadow: none; }
 .action-row { display: flex; gap: 12px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
 .action-btn { padding: 10px 24px; background: var(--black-elevated); border: 1px solid var(--border); border-radius: 10px; color: var(--muted); font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.3s; }
 .action-btn:hover { border-color: var(--orange); color: var(--white); }
+.download-section { margin-top: 48px; padding: 32px; background: var(--black-card); border: 1px solid var(--border); border-radius: 20px; text-align: center; }
+.download-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; margin-bottom: 8px; }
+.download-desc { color: var(--muted); font-size: 14px; font-weight: 300; line-height: 1.6; margin-bottom: 24px; max-width: 560px; margin-left: auto; margin-right: auto; }
+.download-grid { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.dl-btn { padding: 14px 28px; border-radius: 12px; font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; display: flex; align-items: center; gap: 10px; }
+.dl-btn:hover { transform: translateY(-2px); }
+.dl-btn.pdf { background: var(--grad-heat); color: var(--black); }
+.dl-btn.pdf:hover { box-shadow: 0 6px 24px rgba(247,37,133,0.3); }
+.dl-btn.md { background: var(--grad-money); color: var(--black); }
+.dl-btn.md:hover { box-shadow: 0 6px 24px rgba(34,197,94,0.3); }
+.dl-btn .dl-icon { font-size: 18px; }
+.dl-btn .dl-label small { display: block; font-size: 11px; font-weight: 400; opacity: 0.7; }
 
 @media (max-width: 600px) {
   .section-card { padding: 28px 20px; }
@@ -182,7 +194,7 @@ input[type="range"]:focus { box-shadow: none; }
 <body>
 
 <div class="hero" id="heroSection">
-  <div class="hero-badge">March Challenge 2026 &mdash; Day 1</div>
+  <div class="hero-badge">No Fluff Real Estate</div>
   <h1><span class="grad">BUSINESS</span><br>DIAGNOSTIC</h1>
   <p class="hero-sub">Find the gaps. Fix the leaks. Build the machine.<br>A 5-minute assessment to figure out exactly where you are &mdash; and what to fix first.</p>
   <div class="hero-meta">
@@ -245,7 +257,7 @@ input[type="range"]:focus { box-shadow: none; }
     <div class="field-group">
       <label class="field-label">How are you currently finding deals? (select all)</label>
       <div class="option-grid">
-        <label class="option-card" onclick="tog(this)"><input type="checkbox" name="dealSource" value="agents"><div class="option-check"></div><div class="option-text">Working with agents<small>The Gatekeeper model</small></div></label>
+        <label class="option-card" onclick="tog(this)"><input type="checkbox" name="dealSource" value="agents"><div class="option-check"></div><div class="option-text">Working with agents<small>Agent outreach model</small></div></label>
         <label class="option-card" onclick="tog(this)"><input type="checkbox" name="dealSource" value="cold-calling"><div class="option-check"></div><div class="option-text">Cold calling / texting<small>Direct to seller</small></div></label>
         <label class="option-card" onclick="tog(this)"><input type="checkbox" name="dealSource" value="mailers"><div class="option-check"></div><div class="option-text">Direct mail<small>Postcards / letters</small></div></label>
         <label class="option-card" onclick="tog(this)"><input type="checkbox" name="dealSource" value="driving"><div class="option-check"></div><div class="option-text">Driving for dollars<small>Boots on the ground</small></div></label>
@@ -262,7 +274,7 @@ input[type="range"]:focus { box-shadow: none; }
       <select id="leadsPerMonth"><option value="" disabled selected>Select range...</option><option value="0">None right now</option><option value="5">1&ndash;10 leads</option><option value="25">11&ndash;50 leads</option><option value="75">51&ndash;100 leads</option><option value="150">100+ leads</option></select>
     </div>
     <div class="field-group">
-      <label class="field-label">Do you have a buyer list (Checkbooks)?</label>
+      <label class="field-label">Do you have a buyer list?</label>
       <div class="option-grid" style="grid-template-columns:repeat(3,1fr);">
         <label class="option-card" onclick="sel(this,'hasBuyers')"><input type="radio" name="hasBuyers" value="no"><div class="option-check"></div><div class="option-text">No buyers yet</div></label>
         <label class="option-card" onclick="sel(this,'hasBuyers')"><input type="radio" name="hasBuyers" value="small"><div class="option-check"></div><div class="option-text">A few contacts</div></label>
@@ -377,7 +389,7 @@ input[type="range"]:focus { box-shadow: none; }
       <input type="range" id="confidence" min="1" max="10" value="4" oninput="document.getElementById('confD').textContent=this.value+' / 10'">
       <div class="slider-value" id="confD" style="color:var(--neon-cyan);">4 / 10</div>
     </div>
-    <div class="field-group"><label class="field-label">What does "winning" look like at the end of this March Challenge?</label><textarea id="winDefinition" placeholder="Be specific &mdash; what outcome would make this month a massive win for you?"></textarea></div>
+    <div class="field-group"><label class="field-label">What does "winning" look like for you in the next 30 days?</label><textarea id="winDefinition" placeholder="Be specific &mdash; what outcome would be a massive win for you?"></textarea></div>
     <div class="field-group"><label class="field-label">Anything else you want us to know?</label><textarea id="extraNotes" placeholder="Context, challenges, goals, background &mdash; anything that helps us help you..."></textarea></div>
     <div class="nav-row">
       <button class="nav-btn back" onclick="go(5)">&larr; BACK</button>
@@ -404,7 +416,7 @@ function gc(nm){return[...document.querySelectorAll('input[name="'+nm+'"]:checke
 function calcScores(){
   const s={};
   // Deal Flow
-  let df=20; const src=gc('dealSource');
+  let df=15; const src=gc('dealSource');
   if(src.includes('agents'))df+=25; if(src.includes('cold-calling'))df+=10; if(src.includes('ppc'))df+=10; if(src.includes('mailers'))df+=5; if(src.includes('driving'))df+=5; if(src.includes('none'))df=5;
   const ld=parseInt(gv('leadsPerMonth'))||0; if(ld>=75)df+=20;else if(ld>=25)df+=15;else if(ld>=5)df+=8;
   const by=gr('hasBuyers'); if(by==='solid')df+=15;else if(by==='small')df+=8;
@@ -434,7 +446,7 @@ function calcScores(){
   s.readiness=Math.min(re,100);
 
   // Agent Model Fit
-  let am=30; if(src.includes('agents'))am+=30; if(gr('isAgent')==='yes')am+=15; if(cpd>1000||cpd===0)am+=10; if(oh>2000)am+=10;
+  let am=10; if(src.includes('agents'))am+=30; if(gr('isAgent')==='yes')am+=15; if(cpd>1000||cpd===0)am+=10; if(oh>2000)am+=10;
   s.agentModel=Math.min(am,100);
 
   s.overall=Math.round(s.dealFlow*.25+s.systems*.20+s.ai*.15+s.financial*.15+s.readiness*.15+s.agentModel*.10);
@@ -442,7 +454,7 @@ function calcScores(){
 }
 
 function sColor(sc){if(sc>=75)return'var(--green)';if(sc>=50)return'var(--acid-yellow)';if(sc>=30)return'var(--orange)';return'var(--red)';}
-function sStat(sc){if(sc>=75)return'Strong — Keep building on this';if(sc>=50)return'Decent — Room for optimization';if(sc>=30)return'Needs work — Priority this challenge';return'Critical gap — This is where we start';}
+function sStat(sc){if(sc>=75)return'Strong — keep building on this';if(sc>=50)return'Decent — room for optimization';if(sc>=30)return'Needs work — prioritize this area';return'Critical gap — start here';}
 function sGrade(sc){if(sc>=90)return'A+';if(sc>=80)return'A';if(sc>=70)return'B+';if(sc>=60)return'B';if(sc>=50)return'C+';if(sc>=40)return'C';if(sc>=30)return'D';return'F';}
 
 function genResults(){
@@ -451,24 +463,33 @@ function genResults(){
   const cats=[{k:'dealFlow',n:'Deal Flow',c:'var(--green)'},{k:'systems',n:'Systems & CRM',c:'var(--vivid-purple)'},{k:'ai',n:'AI Adoption',c:'var(--electric-blue)'},{k:'financial',n:'Financial Health',c:'var(--acid-yellow)'},{k:'readiness',n:'Readiness',c:'var(--neon-cyan)'},{k:'agentModel',n:'Agent Model Fit',c:'var(--orange)'}];
 
   const gaps=[];
-  if(sc.dealFlow<60) gaps.push({t:'Your Deal Pipeline Needs Fuel',p:sc.dealFlow<30?'critical':'high',c:'var(--green)',b:'Your deal flow score is '+sc.dealFlow+'/100. '+(gc('dealSource').includes('none')?"You haven't started sourcing deals yet — that's okay, that's exactly what this challenge is for.":"You're generating some leads, but the pipeline needs more volume and better sources.")+' The Gatekeeper model (working with active listing agents) is the fastest path to deals at $150-200 per deal instead of the $3K industry average. This month, focus on pulling agent lists, running the Call/Comp/Close process, and getting reps in.'});
-  if(sc.systems<60) gaps.push({t:'Systems Are Leaking Deals',p:sc.systems<30?'critical':'high',c:'var(--vivid-purple)',b:'Your systems score is '+sc.systems+'/100. '+(gr('hasCRM')==='none'?"Without a CRM, you're flying blind. Leads are falling through the cracks.":"You have some infrastructure, but follow-up and automation need tightening.")+' Priority one: get your CRM dialed — pipeline stages set up, follow-up sequences active, every lead tracked. The fortune is in the follow-up.'});
-  if(sc.ai<50) gaps.push({t:'AI Is Your Untapped Superpower',p:sc.ai<25?'high':'medium',c:'var(--electric-blue)',b:'Your AI adoption score is '+sc.ai+'/100. '+(gr('aiLevel')==='none'?"You're not using AI at all yet — biggest upside potential in this challenge.":"You're dabbling, but barely scratching the surface.")+' AI is what lets a 1-2 hour/day operation compete with companies spending $80K/month. This month: AI-powered outreach, automated follow-up, and tools that do the heavy lifting.'});
-  if(sc.financial<50) gaps.push({t:'The Economics Need a Rewrite',p:'medium',c:'var(--acid-yellow)',b:'Your financial health score is '+sc.financial+'/100. '+(parseInt(gv('costPerDeal'))>1500?"Your cost per deal is way too high — you could be paying 10-20x less.":"You're early in the game or overhead is eating your margins.")+' The goal: $150-200 cost per deal, minimal overhead, maximum profit per transaction.'});
-  if(sc.readiness<50) gaps.push({t:'Mindset & Commitment Check',p:'medium',c:'var(--neon-cyan)',b:'Your readiness score is '+sc.readiness+'/100. '+(bk==='confidence'?"Fear is the real blocker — completely normal. Everyone started here.":bk==='time'?"Time is tight, but this model is designed for 1-2 hours per day.":"Awareness is step one, and you're here.")+' This challenge is about momentum. One deal changes everything. Trust the system.'});
-  if(gaps.length===0) gaps.push({t:"You're in a Strong Position",p:'low',c:'var(--green)',b:'Your scores are solid across the board. This challenge is about optimization and acceleration — dialing in the AI layer and increasing deal velocity.'});
+  if(sc.dealFlow<60) gaps.push({t:gc('dealSource').includes('none')?'No Deal Pipeline — You Need a System':'Your Deal Pipeline Is Underperforming',p:sc.dealFlow<30?'critical':'high',c:'var(--green)',b:'Your deal flow score is '+sc.dealFlow+'/100. '+(gc('dealSource').includes('none')?"You don't have a deal-finding system yet — that's the #1 thing holding you back. Without a repeatable process for sourcing deals, you're hoping instead of operating.":!gc('dealSource').includes('agents')?"You're spending time and money on lead gen, but you're missing the most efficient channel. The agent outreach model sources deals at $150–200 each — while most investors spend $3,000+.":"You're working with agents, but the pipeline needs volume and consistency. A fully implemented system with AI-powered outreach, automated follow-up, and a real CRM pipeline turns this from manual hustle into a deal-finding machine.")+' Focus on building agent relationships, getting your AI outreach running, and closing more deals through the system.'});
+
+  if(sc.systems<60) gaps.push({t:gr('hasCRM')==='none'?'No CRM — Deals Are Falling Through the Cracks':'Your Systems Need Work',p:sc.systems<30?'critical':'high',c:'var(--vivid-purple)',b:'Your systems score is '+sc.systems+'/100. '+(gr('hasCRM')==='none'?"Without a CRM, you have no pipeline, no follow-up system, and no way to track what's working. Every lead that comes in has nowhere to go.":"You have some infrastructure, but it's not dialed in. Follow-up sequences, pipeline stages, and lead tracking all need to be tightened up.")+' Priority: get your CRM dialed — pipeline stages set up, automated follow-up sequences active, AI text bots handling outreach, and a tracking system so nothing slips.'});
+
+  if(sc.ai<50) gaps.push({t:gr('aiLevel')==='none'?'You\'re Doing Everything Manually':'AI Is Barely Working for You',p:sc.ai<25?'high':'medium',c:'var(--electric-blue)',b:'Your AI adoption score is '+sc.ai+'/100. '+(gr('aiLevel')==='none'?"You're not using AI at all — which means you're doing manually what AI agents can do 24/7. Outreach, follow-up, lead qualification, comp analysis — all of this can run on autopilot.":"You're experimenting, but AI isn't doing the heavy lifting yet. The real unlock is AI agents handling your outreach and follow-up so you can focus on closing.")+' AI text bots and voice agents can handle outreach to listing agents, follow up with leads, and surface off-market deals — all running inside your CRM.'});
+
+  if(sc.financial<50) gaps.push({t:parseInt(gv('costPerDeal'))>1500?'Your Cost Per Deal Is Way Too High':'The Financial Foundation Needs Work',p:'medium',c:'var(--acid-yellow)',b:'Your financial health score is '+sc.financial+'/100. '+(parseInt(gv('costPerDeal'))>1500?"You're spending $1,500+ per deal when the agent outreach model averages $150–200. That's 10–20x more than it should cost.":"You're early — which is actually the perfect time to build this right. Most investors scale into expensive overhead and wonder why margins disappear.")+' The goal: lean operation, AI-powered systems, no bloated overhead. Every dollar goes toward deal flow, not vanity metrics.'});
+
+  if(gr('hasBuyers')==='no'&&sc.dealFlow<70) gaps.push({t:'No Buyer List — You Can\'t Move Deals Without Buyers',p:'high',c:'var(--green)',b:'Having deals without buyers is like having inventory with no customers. You need a system to build, organize, and communicate with your buyer list — texting, qualifying, and matching buyers to deals fast. Start pulling cash buyer data for your market and building those relationships now.'});
+
+  if(sc.readiness<50) gaps.push({t:'You Need a System, Not More Motivation',p:'medium',c:'var(--neon-cyan)',b:'Your readiness score is '+sc.readiness+'/100. '+(bk==='confidence'?"Confidence comes from having a system and support — not from figuring it all out alone.":bk==='time'?"This model is designed for 1–2 focused hours per day. The AI and automation do the heavy lifting.":bk==='knowledge'?"You don't need to know everything — you need a system that's already proven. Implementation closes the knowledge gap fast.":bk==='money'?"The right system pays for itself with your first deal. Most investors spend $3,000+ per deal — this model runs at $150–200.":"The fact that you're here means you're ready to take the next step.")+' One deal changes everything — and the path to that first deal is shorter than you think when you have the right system implemented.'});
+
+  if(gaps.length===0) gaps.push({t:"You're Dialed — Time to Scale",p:'low',c:'var(--green)',b:'Your scores are strong across the board. You\'ve got the systems, the AI, and the deal flow. Focus on velocity — more agent relationships, more AI-powered outreach, and tightening dispo so every deal gets moved fast.'});
 
   const qw=[];
-  if(!gc('dealSource').includes('agents'))qw.push({t:'Pull Your First Agent List',d:'Use Batch Leads to pull active listing agents in your market. Start with agents who have 3+ listings — these are your Tier 1 Gatekeepers.'});
-  if(gr('hasCRM')==='none')qw.push({t:'Get Your CRM Set Up Today',d:'Even a basic pipeline beats no pipeline. Set up stages: New Lead → Contacted → Interested → Under Contract → Closed.'});
-  if(gr('aiLevel')==='none'||gr('aiLevel')==='basic')qw.push({t:'Set Up Your First AI Workflow',d:'Start simple — an AI-powered text sequence to agents. One automation running 24/7 outperforms hours of manual outreach.'});
-  if(gr('hasBuyers')==='no')qw.push({t:'Build Your Checkbook List',d:'Pull cash buyer data from Investor Base for your market. You need buyers ready before deals come — not after.'});
-  qw.push({t:'Run Your First 3 Cs Cycle',d:'Call an agent, comp the property, work toward the close. Get one full cycle done this week.'});
+  if(!gc('dealSource').includes('agents'))qw.push({t:'Start the Agent Outreach Model',d:'Pull active listing agents in your market — focus on agents with 3+ listings. Get your outreach running through the system and start the call/comp/close cycle.'});
+  if(gr('hasCRM')==='none')qw.push({t:'Get Your CRM Implemented',d:'Pipeline stages, follow-up automations, and AI bots all need to be configured and running. A CRM you don\'t use is the same as no CRM.'});
+  else if(gr('hasCRM')==='basic')qw.push({t:'Dial In Your CRM Pipeline',d:'You have a CRM but it\'s barely working for you. Focus on automated follow-up sequences, AI text outreach, and real pipeline stages.'});
+  if(gr('aiLevel')==='none'||gr('aiLevel')==='basic')qw.push({t:'Deploy AI Agents for Outreach',d:'AI text bots and voice agents can handle your outreach to listing agents 24/7 — surfacing off-market deals while you sleep. Get them configured and running inside your CRM.'});
+  if(gr('hasBuyers')==='no')qw.push({t:'Start Building Your Buyer List',d:'Deals without buyers go nowhere. Pull cash buyer data for your market, start texting and qualifying buyers, and have them ready before deals come in.'});
+  if(gr('hasAutomation')==='none')qw.push({t:'Automate Your Follow-Up',d:'Manual follow-up is the #1 deal killer. Set up AI-powered sequences that run every day, re-engaging leads you\'d otherwise lose.'});
+  qw.push({t:'Run Your Numbers This Week',d:'Track your outreach volume, response rates, and pipeline activity. You can\'t improve what you don\'t measure. Start logging your daily numbers.'});
   if(qw.length>4)qw.length=4;
 
   const stLabel=st==='pre-first'?'First Check Club':st==='1-3-deals'?'1-3 Deals':st==='4-10-deals'?'Builder (4-10)':'Scaling (10+)';
 
-  let h='<div class="results-hero"><div class="hero-badge">Diagnostic Complete &mdash; March 3, 2026</div><h2><span class="grad">'+nm.toUpperCase()+"'S</span><br>GAP ANALYSIS</h2></div>";
+  let h='<div class="results-hero"><div class="hero-badge">Diagnostic Complete</div><h2><span class="grad">'+nm.toUpperCase()+"'S</span><br>GAP ANALYSIS</h2></div>";
   h+='<div class="score-ring-wrap"><div class="score-ring"><svg viewBox="0 0 200 200"><circle class="bg" cx="100" cy="100" r="85"/><circle class="fill" cx="100" cy="100" r="85" stroke="'+oc+'" stroke-dasharray="'+circ+'" stroke-dashoffset="'+dash+'" style="filter:drop-shadow(0 0 8px '+oc+')"/></svg><div class="score-center"><div class="score-number" style="color:'+oc+'">'+sc.overall+'</div><div class="score-label">Overall Score</div></div></div></div>';
   h+='<div style="text-align:center;margin-bottom:48px"><div style="font-family:\'JetBrains Mono\',monospace;font-size:13px;color:var(--dim)">'+mk+' · '+stLabel+' · Grade: <span style="color:'+oc+';font-weight:700">'+sGrade(sc.overall)+'</span></div></div>';
 
@@ -484,19 +505,101 @@ function genResults(){
   qw.forEach((w,i)=>{h+='<div class="win-card"><div class="win-number">QUICK WIN #'+(i+1)+'</div><div class="win-title">'+w.t+'</div><div class="win-desc">'+w.d+'</div></div>';});
   h+='</div></div>';
 
-  if(wd){h+='<div class="gap-section"><div class="hero-badge" style="margin-bottom:8px">Your North Star</div><div class="gap-title">WHAT WINNING LOOKS LIKE</div><div style="background:var(--black-card);border:1px solid var(--border);border-radius:16px;padding:28px;border-left:3px solid var(--orange)"><div style="color:var(--muted);font-size:15px;font-weight:300;line-height:1.8;font-style:italic">&ldquo;'+wd+'&rdquo;</div><div style="margin-top:12px;font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--orange)">&mdash; '+nm+', March Challenge 2026</div></div></div>';}
+  if(wd){h+='<div class="gap-section"><div class="hero-badge" style="margin-bottom:8px">Your North Star</div><div class="gap-title">WHAT WINNING LOOKS LIKE</div><div style="background:var(--black-card);border:1px solid var(--border);border-radius:16px;padding:28px;border-left:3px solid var(--orange)"><div style="color:var(--muted);font-size:15px;font-weight:300;line-height:1.8;font-style:italic">&ldquo;'+wd+'&rdquo;</div><div style="margin-top:12px;font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--orange)">&mdash; '+nm+'</div></div></div>';}
 
-  const headline=sc.overall>=70?"YOU'RE READY TO <span class='grad'>ACCELERATE</span>":sc.overall>=40?"THE <span class='grad'>FOUNDATION</span> IS BEING BUILT":"THIS IS YOUR <span class='grad'>STARTING LINE</span>";
-  const msg=sc.overall>=70?'You\'ve got a solid base, '+nm+'. This challenge is about turning that foundation into a deal-closing machine. Focus on the AI layer and pipeline velocity — that\'s where your biggest unlock is.':sc.overall>=40?'You\'ve got pieces in place, '+nm+'. The mission this month is connecting those pieces into a system that runs. The gaps above are your roadmap — work them in order.':'Every single person who\'s crushed it in this community started exactly where you are right now, '+nm+'. This isn\'t about where you\'re starting — it\'s about the system you\'re building. Follow the challenge, trust the process, and watch what happens in 30 days.';
+  const headline=sc.overall>=70?"YOU'RE READY TO <span class='grad'>ACCELERATE</span>":sc.overall>=40?"LET'S <span class='grad'>BUILD YOUR SYSTEM</span>":"LET'S GET YOU <span class='grad'>IMPLEMENTED</span>";
+  const msg=sc.overall>=70?'You\'ve got a real foundation, '+nm+'. Focus on the AI layer and pipeline velocity — that\'s where your biggest unlock is. More agent outreach, tighter follow-up, and scaling your deal flow.':sc.overall>=40?'You\'ve got pieces in place, '+nm+', but they\'re not connected into a system yet. The gaps above are your roadmap — CRM, AI agents, outreach, follow-up. Work them in order and build the machine.':'Everyone who\'s built a successful deal-finding business started right here, '+nm+'. The difference is having the right system implemented — agent outreach, AI, CRM, buyer list. Follow the roadmap above and build it one piece at a time.';
 
-  h+='<div class="summary-box"><div class="summary-name">'+nm+"'s March Challenge Game Plan</div><div class=\"summary-headline\">"+headline+'</div><div class="summary-text">'+msg+'</div><div style="font-family:\'JetBrains Mono\',monospace;font-size:12px;color:var(--dim);margin-top:12px">NO FLUFF REAL ESTATE · MARCH CHALLENGE 2026 · DAY 1</div></div>';
+  h+='<div class="summary-box"><div class="summary-name">'+nm+"'s Game Plan</div><div class=\"summary-headline\">"+headline+'</div><div class="summary-text">'+msg+'</div><div style="font-family:\'JetBrains Mono\',monospace;font-size:12px;color:var(--dim);margin-top:12px">NO FLUFF REAL ESTATE · BUSINESS DIAGNOSTIC</div></div>';
+  h+='<div class="download-section"><div class="download-title">EXPORT YOUR DIAGNOSTIC</div><div class="download-desc">Download your results to keep, review, and track your progress. Use the markdown file to upload to the No Fluff Assistant for personalized AI coaching.</div><div class="download-grid"><button class="dl-btn pdf" onclick="downloadPDF()"><span class="dl-icon">&#x1F4C4;</span><span class="dl-label">Save as PDF<small>Print &rarr; Save as PDF</small></span></button><button class="dl-btn md" onclick="downloadMD()"><span class="dl-icon">&#x1F4DD;</span><span class="dl-label">Download .md<small>Upload to No Fluff Assistant</small></span></button></div></div>';
   h+='<div class="action-row"><button class="action-btn" onclick="window.print()">Print Results</button><button class="action-btn" onclick="restart()">Start Over</button></div>';
+
+  // Store results globally for downloads
+  window._diagData = { sc, nm, mk, st, stLabel, bk, wd, ig, cats, gaps, qw, headline: headline.replace(/<[^>]*>/g,''), msg, extraNotes: gv('extraNotes'), dealSources: gc('dealSource'), aiLevel: gr('aiLevel'), aiUses: gc('aiUse'), hasCRM: gr('hasCRM'), hasAutomation: gr('hasAutomation'), hasBuyers: gr('hasBuyers'), isAgent: gr('isAgent'), hoursPerWeek: gv('hoursPerWeek'), followUp: gv('followUp'), techComfort: gv('techComfort'), confidence: gv('confidence'), currentRevenue: gv('currentRevenue'), monthlyOverhead: gv('monthlyOverhead'), costPerDeal: gv('costPerDeal'), trackingMethod: gv('trackingMethod') };
 
   document.getElementById('resultsContent').innerHTML=h;
   document.getElementById('formBox').classList.remove('active');
   document.getElementById('progressBar').classList.remove('active');
   document.getElementById('resultsBox').classList.add('active');
   scrollTo({top:0,behavior:'smooth'});
+}
+
+function downloadMD() {
+  const d = window._diagData;
+  if (!d) return alert('Please complete the diagnostic first.');
+  const date = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+  const sGradeVal = sGrade(d.sc.overall);
+
+  const dealSourceMap = { 'agents':'Working with Agents (Agent Outreach Model)', 'cold-calling':'Cold Calling / Texting', 'mailers':'Direct Mail', 'driving':'Driving for Dollars', 'ppc':'PPC / Paid Ads', 'none':'Not sourcing deals yet' };
+  const aiUseMap = { 'outreach':'Lead Outreach / Texting', 'comps':'Comp Analysis / Underwriting', 'voice':'Voice Agents / Phone Calls', 'content':'Content Creation', 'data':'Data Analysis / Lists', 'none':'Not using AI' };
+
+  let md = `# Business Diagnostic Report — ${d.nm}\n\n`;
+  md += `> Generated: ${date} | No Fluff Real Estate — Business Diagnostic\n\n`;
+  md += `---\n\n`;
+  md += `## Owner Profile\n\n`;
+  md += `- **Name:** ${d.nm}\n`;
+  md += `- **Market:** ${d.mk}\n`;
+  md += `- **Stage:** ${d.stLabel}\n`;
+  md += `- **Licensed Agent:** ${d.isAgent === 'yes' ? 'Yes' : 'No'}\n`;
+  md += `- **Weekly Hours Available:** ${d.hoursPerWeek} hours/week\n`;
+  md += `\n---\n\n`;
+  md += `## Overall Score: ${d.sc.overall}/100 (Grade: ${sGradeVal})\n\n`;
+  md += `### Category Breakdown\n\n`;
+  md += `| Category | Score | Status |\n`;
+  md += `|----------|-------|--------|\n`;
+  d.cats.forEach(c => { md += `| ${c.n} | ${d.sc[c.k]}/100 | ${sStat(d.sc[c.k])} |\n`; });
+  md += `\n---\n\n`;
+  md += `## Current Business Operations\n\n`;
+  md += `### Deal Sourcing\n`;
+  md += `- **Current methods:** ${d.dealSources.length ? d.dealSources.map(s => dealSourceMap[s] || s).join(', ') : 'None specified'}\n`;
+  md += `- **Buyer list:** ${d.hasBuyers === 'solid' ? 'Solid buyer list' : d.hasBuyers === 'small' ? 'A few contacts' : 'No buyers yet'}\n\n`;
+  md += `### Systems & CRM\n`;
+  md += `- **CRM status:** ${d.hasCRM === 'dialed' ? 'Dialed in — active pipeline management' : d.hasCRM === 'basic' ? 'Basic setup — have one, barely use it' : 'No CRM'}\n`;
+  md += `- **Follow-up consistency:** ${d.followUp}/10\n`;
+  md += `- **Automation level:** ${d.hasAutomation === 'full' ? 'Fully automated sequences' : d.hasAutomation === 'some' ? 'Partially automated' : 'Nothing automated — all manual'}\n`;
+  if (d.trackingMethod) md += `- **Current tracking method:** ${d.trackingMethod}\n`;
+  md += `\n`;
+  md += `### AI & Technology\n`;
+  md += `- **AI adoption level:** ${d.aiLevel === 'advanced' ? 'AI running parts of the business' : d.aiLevel === 'intermediate' ? 'AI integrated into workflows' : d.aiLevel === 'basic' ? 'Using ChatGPT for basics' : 'Not using AI'}\n`;
+  md += `- **Current AI use cases:** ${d.aiUses.filter(u => u !== 'none').length ? d.aiUses.filter(u => u !== 'none').map(u => aiUseMap[u] || u).join(', ') : 'None'}\n`;
+  md += `- **Tech comfort level:** ${d.techComfort}/10\n\n`;
+  md += `### Financial Snapshot\n`;
+  md += `- **Total RE revenue to date:** $${parseInt(d.currentRevenue || 0).toLocaleString()}\n`;
+  md += `- **Monthly overhead:** $${parseInt(d.monthlyOverhead || 0).toLocaleString()}/mo\n`;
+  md += `- **Estimated cost per deal:** $${parseInt(d.costPerDeal || 0).toLocaleString()}\n`;
+  md += `- **12-month income goal:** $${parseInt(d.ig || 0).toLocaleString()}\n`;
+  md += `\n---\n\n`;
+  md += `## Mindset & Readiness\n\n`;
+  md += `- **Primary blocker:** ${d.bk === 'knowledge' ? 'Needs a clear roadmap' : d.bk === 'time' ? 'Not enough time' : d.bk === 'money' ? 'Limited capital' : d.bk === 'confidence' ? 'Confidence / fear' : 'Not specified'}\n`;
+  md += `- **30-day confidence level:** ${d.confidence}/10\n`;
+  if (d.wd) md += `- **Definition of winning:** "${d.wd}"\n`;
+  if (d.extraNotes) md += `- **Additional context:** ${d.extraNotes}\n`;
+  md += `\n---\n\n`;
+  md += `## Gap Analysis — Prioritized Action Items\n\n`;
+  d.gaps.forEach((g, i) => { md += `### ${i + 1}. ${g.t} [${g.p.toUpperCase()}]\n\n${g.b}\n\n`; });
+  md += `---\n\n`;
+  md += `## Quick Wins — Immediate Actions\n\n`;
+  d.qw.forEach((w, i) => { md += `${i + 1}. **${w.t}** — ${w.d}\n`; });
+  md += `\n---\n\n`;
+  md += `## Summary\n\n`;
+  md += `**Assessment:** ${d.headline}\n\n`;
+  md += `${d.msg}\n\n`;
+  md += `---\n\n`;
+  md += `*No Fluff Real Estate — Business Diagnostic Report*\n`;
+  md += `*Upload this file to the No Fluff Assistant to personalize your AI coaching experience.*\n`;
+
+  const blob = new Blob([md], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${d.nm.replace(/\s+/g, '-')}-Business-Diagnostic-${new Date().toISOString().slice(0,10)}.md`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function downloadPDF() {
+  // Simply trigger print — user can "Save as PDF" from the print dialog
+  window.print();
 }
 
 function restart(){
